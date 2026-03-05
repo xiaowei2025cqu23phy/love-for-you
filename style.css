@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffe6e6; /* light pink background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 90%;
+}
+
+.heart {
+    font-size: 80px;
+    animation: heartbeat 1s infinite alternate;
+    margin-bottom: 20px;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+h1 {
+    color: #ff4d4d; /* lovely red */
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+    height: 60px; /* give some space for absolute positioning later if needed */
+}
+
+button {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+#yesBtn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+#yesBtn:hover {
+    background-color: #ff3333;
+    transform: scale(1.05);
+}
+
+#noBtn {
+    background-color: #f0f0f0;
+    color: #333;
+    position: relative; /* this will be changed to absolute by JS when hovered */
+}
+
+#noBtn:hover {
+    background-color: #e0e0e0;
+}
+
+/* For the success message */
+.success-message {
+    color: #ff4d4d;
+    font-size: 1.5em;
+    margin-top: 20px;
+    font-weight: bold;
+    display: none;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.hidden {
+    display: none !important;
+}
