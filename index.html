@@ -3,18 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给你的表白</title>
+    <title>致我最特别的女孩</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="heart">❤️</div>
-        <h1 id="question">你愿意做我的女朋友吗？</h1>
-        <div class="buttons">
-            <button id="yesBtn">愿意</button>
-            <button id="noBtn">不愿意</button>
+    <!-- Floating background hearts -->
+    <div id="bg-hearts"></div>
+
+    <!-- Screen 1: The Envelope -->
+    <div id="screen1" class="screen active">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body">
+                <div class="wax-seal">💌</div>
+                <div class="envelope-text">点击打开</div>
+            </div>
+        </div>
+        <p class="hint">有一封信想给你看...</p>
+    </div>
+
+    <!-- Screen 2: The Letter -->
+    <div id="screen2" class="screen hidden">
+        <div class="letter-container">
+            <div id="letter-content" class="letter-text"></div>
+            <button id="nextBtn" class="action-btn hidden">继续</button>
         </div>
     </div>
+
+    <!-- Screen 3: The Question -->
+    <div id="screen3" class="screen hidden">
+        <div class="question-container">
+            <div class="big-heart">💖</div>
+            <h1 id="question">所以...你愿意做我的女朋友吗？</h1>
+            <div class="buttons">
+                <button id="yesBtn" class="action-btn yes-btn">我愿意</button>
+                <button id="noBtn" class="action-btn no-btn">再想想</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
