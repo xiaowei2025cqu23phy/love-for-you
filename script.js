@@ -1,84 +1,183 @@
+// Elements
+const screen1 = document.getElementById('screen1');
+const screen2 = document.getElementById('screen2');
+const screen3 = document.getElementById('screen3');
+const envelope = document.getElementById('envelope');
+const letterContent = document.getElementById('letter-content');
+const nextBtn = document.getElementById('nextBtn');
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const question = document.getElementById('question');
-const heart = document.querySelector('.heart');
-const container = document.getElementById('container');
 const buttonsDiv = document.querySelector('.buttons');
+const bgHeartsContainer = document.getElementById('bg-hearts');
 
-// Make the 'No' button run away!
-noBtn.addEventListener('mouseover', function() {
-    // When the mouse hovers, we'll position the button absolutely
-    noBtn.style.position = 'absolute';
+// Sincere Letter Text
+const textToType = `亲爱的，
 
-    // Get the viewport dimensions
-    const maxX = window.innerWidth - noBtn.offsetWidth;
-    const maxY = window.innerHeight - noBtn.offsetHeight;
+从我们相遇的那一刻起，
+我的世界就因为你而变得不同。
 
-    // Generate random coordinates within the screen bounds
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
+你的笑容，你的温柔，
+你的一举一动都深深地吸引着我。
 
-    // Move the button to the new coordinates
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
+我花了很多心思做这个网页，
+只是想用最特别的方式告诉你：
+我喜欢你，很久了。
+
+你想知道我接下来的问题吗？`;
+
+let typingIndex = 0;
+let typingSpeed = 100; // milliseconds per character
+
+// Background Hearts
+function createBgHearts() {
+    const heartsCount = 20;
+    for (let i = 0; i < heartsCount; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            bgHeartsContainer.appendChild(heart);
+
+            // Infinite cleanup and recreate to save memory
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+                createSingleBgHeart();
+            });
+        }, i * 500); // Stagger creation
+    }
+}
+
+function createSingleBgHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('bg-heart');
+    heart.innerHTML = '❤';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    bgHeartsContainer.appendChild(heart);
+    heart.addEventListener('animationend', () => {
+        heart.remove();
+        createSingleBgHeart();
+    });
+}
+
+// Flow Logic
+// Step 1: Open Envelope
+envelope.addEventListener('click', () => {
+    envelope.classList.add('opened');
+    setTimeout(() => {
+        switchScreen(screen1, screen2);
+        setTimeout(typeLetter, 500); // Start typing after transition
+    }, 800);
 });
 
-// Also make it move on touch devices to ensure it's unclickable
-noBtn.addEventListener('touchstart', function(e) {
-    e.preventDefault(); // Prevent touch click
-    noBtn.style.position = 'absolute';
-    const maxX = window.innerWidth - noBtn.offsetWidth;
-    const maxY = window.innerHeight - noBtn.offsetHeight;
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-    noBtn.style.left = `${randomX}px`;
-    noBtn.style.top = `${randomY}px`;
+// Step 2: Type Letter
+function typeLetter() {
+    if (typingIndex < textToType.length) {
+        letterContent.textContent += textToType.charAt(typingIndex);
+        letterContent.classList.add('typing-cursor');
+        typingIndex++;
+
+        // Randomize typing speed slightly for realism
+        let speed = typingSpeed;
+        if (textToType.charAt(typingIndex - 1) === '，' || textToType.charAt(typingIndex - 1) === '。' || textToType.charAt(typingIndex - 1) === '\n') {
+            speed += 400; // Pause at punctuation and newlines
+        } else {
+            speed += (Math.random() * 50 - 25);
+        }
+
+        setTimeout(typeLetter, speed);
+    } else {
+        letterContent.classList.remove('typing-cursor');
+        nextBtn.classList.remove('hidden'); // Show Next button
+    }
+}
+
+// Step 3: Go to Question
+nextBtn.addEventListener('click', () => {
+    switchScreen(screen2, screen3);
 });
 
-// Handle the "Yes" button click
-yesBtn.addEventListener('click', function() {
-    // Hide buttons and change the text
+// Helper to switch screens
+function switchScreen(hideScreen, showScreen) {
+    hideScreen.classList.remove('active');
+    hideScreen.classList.add('hidden');
+
+    setTimeout(() => {
+        showScreen.classList.remove('hidden');
+        showScreen.classList.add('active');
+    }, 1000); // Wait for fade out
+}
+
+
+// The Playful "No" Button
+function moveNoBtn() {
+    noBtn.style.position = 'absolute';
+
+    // Bounds check to keep button safely on screen
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+    const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+}
+
+noBtn.addEventListener('mouseover', moveNoBtn);
+noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    moveNoBtn();
+});
+
+// The Success "Yes" Button
+yesBtn.addEventListener('click', () => {
     buttonsDiv.classList.add('hidden');
-    question.innerHTML = '太好了！我就知道你也会答应的！<br>💕 永远爱你 💕';
-
-    // Create lots of falling hearts (simple confetti effect)
+    question.innerHTML = '太好了！这真的是我最开心的一天！<br>💕 余生请多指教 💕';
+    question.style.fontSize = '2.5rem';
     createConfetti();
 });
 
 function createConfetti() {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
         const conf = document.createElement('div');
-        conf.innerHTML = '❤️';
-        conf.style.position = 'absolute';
+        conf.classList.add('confetti');
 
-        // Random start position
+        // Mix of hearts and sparkles
+        const shapes = ['❤', '✨', '💖'];
+        conf.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+
         conf.style.left = Math.random() * 100 + 'vw';
-        conf.style.top = '-20px'; // Start slightly off screen
+        conf.style.top = '-50px';
 
-        // Random size
-        const size = Math.random() * 20 + 10;
+        const size = Math.random() * 20 + 15;
         conf.style.fontSize = `${size}px`;
 
-        // Random animation duration
-        const duration = Math.random() * 3 + 2; // 2 to 5 seconds
-        conf.style.animation = `fall ${duration}s linear forwards`;
+        const duration = Math.random() * 4 + 3;
+
+        // Random horizontal drift
+        const drift = (Math.random() - 0.5) * 200;
+
+        conf.animate([
+            { transform: 'translate3d(0,0,0) rotate(0deg)', opacity: 1 },
+            { transform: `translate3d(${drift}px, 120vh, 0) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+        ], {
+            duration: duration * 1000,
+            easing: 'cubic-bezier(.37,0,.63,1)',
+            fill: 'forwards'
+        });
 
         document.body.appendChild(conf);
 
-        // Cleanup after animation finishes
-        setTimeout(() => {
-            conf.remove();
-        }, duration * 1000);
+        setTimeout(() => conf.remove(), duration * 1000);
     }
 }
 
-// Add falling animation dynamically to the page
-const style = document.createElement('style');
-style.innerHTML = `
-    @keyframes fall {
-        to {
-            transform: translateY(110vh) rotate(360deg);
-        }
-    }
-`;
-document.head.appendChild(style);
+// Initialize
+createBgHearts();
