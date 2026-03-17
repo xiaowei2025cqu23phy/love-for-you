@@ -179,5 +179,54 @@ function createConfetti() {
     }
 }
 
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取 DOM 元素
+    const heart = document.querySelector('.heart');
+    const message = document.querySelector('.message');
+    const btn = document.querySelector('.love-btn');
+    
+    // 心跳动画
+    function heartbeat() {
+        heart.classList.add('pulse');
+        setTimeout(() => {
+            heart.classList.remove('pulse');
+        }, 300);
+    }
+    
+    // 定时心跳
+    setInterval(heartbeat, 1000);
+    
+    // 按钮点击事件
+    btn.addEventListener('click', function() {
+        showMessage('❤️ 我爱你，永远永远 ❤️');
+        createHearts();
+    });
+    
+    // 显示消息
+    function showMessage(text) {
+        message.textContent = text;
+        message.style.opacity = 1;
+    }
+    
+    // 创建爱心雨
+    function createHearts() {
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.textContent = '❤️';
+                document.body.appendChild(heart);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+});
+
 // Initialize
 createBgHearts();
