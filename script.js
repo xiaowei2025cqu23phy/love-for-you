@@ -142,7 +142,99 @@ yesBtn.addEventListener('click', () => {
     question.innerHTML = '太好了！这真的是我最开心的一天！<br>💕 余生请多指教 💕';
     question.style.fontSize = '2.5rem';
     createConfetti();
+    
+    // 2秒后跳转到爱心动画页面
+    setTimeout(() => {
+        switchScreen(screen3, screen4);
+        startLoveAnimation();
+    }, 2500);
 });
+
+// Love Animation Function
+function startLoveAnimation() {
+    createParticles();
+    createSparkles();
+    createFloatingHearts();
+}
+
+// Create floating particles (hearts and stars)
+function createParticles() {
+    const particleContainer = document.getElementById('particle-container');
+    const symbols = ['❤️', '💖', '💕', '✨', '💗', '💓'];
+    
+    setInterval(() => {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+        
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.fontSize = (Math.random() * 30 + 15) + 'px';
+        
+        const duration = Math.random() * 5 + 5;
+        particle.style.animationDuration = duration + 's';
+        
+        particleContainer.appendChild(particle);
+        
+        // Remove after animation
+        setTimeout(() => {
+            particle.remove();
+        }, duration * 1000);
+    }, 300);
+}
+
+// Create sparkle effects around the heart
+function createSparkles() {
+    const container = document.querySelector('.love-animation-container');
+    
+    setInterval(() => {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 100 + Math.random() * 50;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        
+        sparkle.style.left = `calc(50% + ${x}px)`;
+        sparkle.style.top = `calc(50% + ${y}px)`;
+        
+        container.appendChild(sparkle);
+        
+        setTimeout(() => {
+            sparkle.remove();
+        }, 2000);
+    }, 200);
+}
+
+// Create additional floating hearts
+function createFloatingHearts() {
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.position = 'fixed';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = '100vh';
+        heart.style.fontSize = (Math.random() * 40 + 20) + 'px';
+        heart.style.opacity = Math.random() * 0.5 + 0.3;
+        heart.style.pointerEvents = 'none';
+        heart.style.zIndex = '1';
+        
+        const duration = Math.random() * 8 + 6;
+        heart.style.transition = `all ${duration}s linear`;
+        
+        document.body.appendChild(heart);
+        
+        // Start animation
+        setTimeout(() => {
+            heart.style.top = '-100px';
+            heart.style.transform = `rotate(${Math.random() * 360}deg)`;
+        }, 100);
+        
+        setTimeout(() => {
+            heart.remove();
+        }, duration * 1000);
+    }, 500);
+}
 
 function createConfetti() {
     for (let i = 0; i < 100; i++) {
